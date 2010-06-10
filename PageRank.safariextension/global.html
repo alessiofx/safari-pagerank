@@ -2,7 +2,7 @@
 <html> 
   <head> 
     <meta charset='utf-8' /> 
-    <title>PageRank Checker</title> 
+    <title>Safari PageRank</title> 
     <script src="jquery-1.4.2.min.js"></script>
     <script>
     /*
@@ -183,13 +183,13 @@
         if (safari.application.activeBrowserWindow.activeTab.url) {
             fetchPageRank(safari.application.activeBrowserWindow.activeTab.url);
         } else {
-            updateBadge("");
+            updateBadge("",safari.application.activeBrowserWindow);
         }
     }
     
     function clearStorage() {
         localStorage.clear();
-        updateBadge("");
+        updateBadge("",safari.application.activeBrowserWindow);
     }
     
     function fetchPageRank(url) {
@@ -197,7 +197,7 @@
             return;
         }
         if (localStorage.getItem(url)) {
-            updateBadge(localStorage.getItem(url));
+            updateBadge(localStorage.getItem(url),safari.application.activeBrowserWindow);
             return;
         }
          var reqgr = "info:" + url;
@@ -228,9 +228,9 @@
        gXMLHttpRequest=null; 
     }
     
-    function updateBadge(n) {
+    function updateBadge(n,w) {
       $.each(safari.extension.toolbarItems, function(i, v) {
-          if (v.label=='PageRank') { v.badge = n; }
+          if (v.label=='PageRank') { if (v.browserWindow == w) { v.badge = n; v.toolTip = n + '/10 Google PageRank'; } }
       });
     }
 
